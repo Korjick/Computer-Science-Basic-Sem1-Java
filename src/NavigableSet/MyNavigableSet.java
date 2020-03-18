@@ -194,9 +194,11 @@ public class MyNavigableSet<T> extends AbstractSet<T> implements NavigableSet<T>
 
         if(inclusive) for (int i = 0; i < arr.size() - 1; i++)
             if(comparator.compare(toElement, arr.get(i)) >= 0) returnArr.add(arr.get(i));
+            else break;
 
         if(!inclusive) for (int i = 0; i < arr.size() - 1; i++)
             if(comparator.compare(toElement, arr.get(i)) > 0) returnArr.add(arr.get(i));
+            else break;
         return returnArr;
     }
 
@@ -206,9 +208,11 @@ public class MyNavigableSet<T> extends AbstractSet<T> implements NavigableSet<T>
 
         if(inclusive) for (int i = 0; i < arr.size() - 1; i++)
             if(comparator.compare(fromElement, arr.get(i)) <= 0) returnArr.add(arr.get(i));
+            else break;
 
         if(!inclusive) for (int i = 0; i < arr.size() - 1; i++)
             if(comparator.compare(fromElement, arr.get(i)) < 0) returnArr.add(arr.get(i));
+            else break;
 
         return returnArr;
     }
@@ -233,7 +237,9 @@ public class MyNavigableSet<T> extends AbstractSet<T> implements NavigableSet<T>
     public SortedSet<T> headSet(T toElement){
         SortedSet<T> returnArr = new MyNavigableSet<>(comparator);
 
-        for (int i = 0; i < arr.size() - 1; i++) if(comparator.compare(toElement, arr.get(i)) > 0) returnArr.add(arr.get(i));
+        for (int i = 0; i < arr.size() - 1; i++)
+            if(comparator.compare(toElement, arr.get(i)) > 0) returnArr.add(arr.get(i));
+            else break;
         return returnArr;
     }
 
@@ -241,7 +247,9 @@ public class MyNavigableSet<T> extends AbstractSet<T> implements NavigableSet<T>
     public SortedSet<T> tailSet(T fromElement){
         SortedSet<T> returnArr = new MyNavigableSet<>(comparator);
 
-        for (int i = 0; i < arr.size() - 1; i++) if(comparator.compare(fromElement, arr.get(i)) < 0) returnArr.add(arr.get(i));
+        for (int i = 0; i < arr.size() - 1; i++)
+            if(comparator.compare(fromElement, arr.get(i)) < 0) returnArr.add(arr.get(i));
+            else break;
         return returnArr;
     }
 
