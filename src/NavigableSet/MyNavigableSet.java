@@ -165,11 +165,11 @@ public class MyNavigableSet<T> extends AbstractSet<T> implements NavigableSet<T>
 
     @Override
     public NavigableSet<T> subSet(T fromElement, boolean fromInclusive, T toElement, boolean toInclusive)
-            throws IndexOutOfBoundsException {
+            throws NoSuchElementException {
         NavigableSet<T> returnArr = new MyNavigableSet<>(comparator);
         int start = arr.indexOf(fromElement);
         int end = arr.indexOf(toElement);
-        if(start == -1 || end == -1) throw new IndexOutOfBoundsException();
+        if(start == -1 || end == -1) throw new NoSuchElementException();
 
         if (!fromInclusive && !toInclusive) for (int i = start + 1; i < end - 1; i++) returnArr.add(arr.get(i));
         if (!fromInclusive && toInclusive) for (int i = start + 1; i < end; i++) returnArr.add(arr.get(i));
@@ -180,25 +180,27 @@ public class MyNavigableSet<T> extends AbstractSet<T> implements NavigableSet<T>
     }
 
     @Override
-    public NavigableSet<T> headSet(T toElement, boolean inclusive) throws IndexOutOfBoundsException{
+    public NavigableSet<T> headSet(T toElement, boolean inclusive){
         NavigableSet<T> returnArr = new MyNavigableSet<>(comparator);
-        int end = arr.indexOf(toElement);
-        if(end == -1) throw new IndexOutOfBoundsException();
 
-        if (!inclusive) for (int i = 0; i < end - 1; i++) returnArr.add(arr.get(i));
-        else for (int i = 0; i < end; i++) returnArr.add(arr.get(i));
+        if(inclusive) for (int i = 0; i < arr.size() - 1; i++)
+            if(comparator.compare(toElement, arr.get(i)) >= 0) returnArr.add(arr.get(i));
 
+        if(!inclusive) for (int i = 0; i < arr.size() - 1; i++)
+            if(comparator.compare(toElement, arr.get(i)) > 0) returnArr.add(arr.get(i));
         return returnArr;
     }
 
     @Override
-    public NavigableSet<T> tailSet(T fromElement, boolean inclusive) throws IndexOutOfBoundsException {
+    public NavigableSet<T> tailSet(T fromElement, boolean inclusive){
         NavigableSet<T> returnArr = new MyNavigableSet<>(comparator);
-        int start = arr.indexOf(fromElement);
-        if(start == -1) throw new IndexOutOfBoundsException();
 
-        if (!inclusive) for (int i = start + 1; i < arr.size(); i++) returnArr.add(arr.get(i));
-        else for (int i = start; i < arr.size(); i++) returnArr.add(arr.get(i));
+        if(inclusive) for (int i = 0; i < arr.size() - 1; i++)
+            if(comparator.compare(fromElement, arr.get(i)) <= 0) returnArr.add(arr.get(i));
+
+        if(!inclusive) for (int i = 0; i < arr.size() - 1; i++)
+            if(comparator.compare(fromElement, arr.get(i)) < 0) returnArr.add(arr.get(i));
+
         return returnArr;
     }
 
@@ -208,33 +210,29 @@ public class MyNavigableSet<T> extends AbstractSet<T> implements NavigableSet<T>
     }
 
     @Override
-    public SortedSet<T> subSet(T fromElement, T toElement) throws IndexOutOfBoundsException {
+    public SortedSet<T> subSet(T fromElement, T toElement) throws NoSuchElementException {
         SortedSet<T> returnArr = new MyNavigableSet<>(comparator);
         int start = arr.indexOf(fromElement);
         int end = arr.indexOf(toElement);
-        if(start == -1 || end == -1) throw new IndexOutOfBoundsException();
+        if(start == -1 || end == -1) throw new NoSuchElementException();
 
         for (int i = start + 1; i < end - 1; i++) returnArr.add(arr.get(i));
         return returnArr;
     }
 
     @Override
-    public SortedSet<T> headSet(T toElement) throws IndexOutOfBoundsException{
+    public SortedSet<T> headSet(T toElement){
         SortedSet<T> returnArr = new MyNavigableSet<>(comparator);
-        int end = arr.indexOf(toElement);
-        if(end == -1) throw new IndexOutOfBoundsException();
 
-        for (int i = 0; i < end - 1; i++) returnArr.add(arr.get(i));
+        for (int i = 0; i < arr.size() - 1; i++) if(comparator.compare(toElement, arr.get(i)) > 0) returnArr.add(arr.get(i));
         return returnArr;
     }
 
     @Override
-    public SortedSet<T> tailSet(T fromElement) throws IndexOutOfBoundsException {
+    public SortedSet<T> tailSet(T fromElement){
         SortedSet<T> returnArr = new MyNavigableSet<>(comparator);
-        int start = arr.indexOf(fromElement);
-        if(start == -1) throw new IndexOutOfBoundsException();
 
-        for (int i = start; i < arr.size(); i++) returnArr.add(arr.get(i));
+        for (int i = 0; i < arr.size() - 1; i++) if(comparator.compare(fromElement, arr.get(i)) < 0) returnArr.add(arr.get(i));
         return returnArr;
     }
 
