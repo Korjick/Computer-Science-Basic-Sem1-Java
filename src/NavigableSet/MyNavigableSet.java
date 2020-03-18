@@ -165,17 +165,26 @@ public class MyNavigableSet<T> extends AbstractSet<T> implements NavigableSet<T>
 
     @Override
     public NavigableSet<T> subSet(T fromElement, boolean fromInclusive, T toElement, boolean toInclusive)
-            throws NoSuchElementException {
+            throws IllegalArgumentException {
+
         NavigableSet<T> returnArr = new MyNavigableSet<>(comparator);
-        int start = arr.indexOf(fromElement);
-        int end = arr.indexOf(toElement);
-        if(start == -1 || end == -1) throw new NoSuchElementException();
+        if(comparator.compare(toElement, fromElement) < 0) throw new IllegalArgumentException();
 
-        if (!fromInclusive && !toInclusive) for (int i = start + 1; i < end - 1; i++) returnArr.add(arr.get(i));
-        if (!fromInclusive && toInclusive) for (int i = start + 1; i < end; i++) returnArr.add(arr.get(i));
-        if (fromInclusive && !toInclusive) for (int i = start; i < end - 1; i++) returnArr.add(arr.get(i));
-        if (fromInclusive && toInclusive) for (int i = start; i < end; i++) returnArr.add(arr.get(i));
+        if(fromInclusive && toInclusive)
+            for (T el: arr) if(comparator.compare(el, fromElement) >= 0 && comparator.compare(el, toElement) <= 0)
+                returnArr.add(el);
 
+        if(!fromInclusive && toInclusive)
+            for (T el: arr) if(comparator.compare(el, fromElement) > 0 && comparator.compare(el, toElement) <= 0)
+                returnArr.add(el);
+
+        if(fromInclusive && !toInclusive)
+            for (T el: arr) if(comparator.compare(el, fromElement) >= 0 && comparator.compare(el, toElement) < 0)
+                returnArr.add(el);
+
+        if(!fromInclusive && !toInclusive)
+            for (T el: arr) if(comparator.compare(el, fromElement) > 0 && comparator.compare(el, toElement) < 0)
+                returnArr.add(el);
         return returnArr;
     }
 
@@ -210,13 +219,13 @@ public class MyNavigableSet<T> extends AbstractSet<T> implements NavigableSet<T>
     }
 
     @Override
-    public SortedSet<T> subSet(T fromElement, T toElement) throws NoSuchElementException {
+    public SortedSet<T> subSet(T fromElement, T toElement) throws IllegalArgumentException {
         SortedSet<T> returnArr = new MyNavigableSet<>(comparator);
-        int start = arr.indexOf(fromElement);
-        int end = arr.indexOf(toElement);
-        if(start == -1 || end == -1) throw new NoSuchElementException();
 
-        for (int i = start + 1; i < end - 1; i++) returnArr.add(arr.get(i));
+        if(comparator.compare(toElement, fromElement) < 0) throw new IllegalArgumentException();
+        for (T el: arr){
+            if(comparator.compare(el, fromElement) >= 0 && comparator.compare(el, toElement) < 0) returnArr.add(el);
+        }
         return returnArr;
     }
 
