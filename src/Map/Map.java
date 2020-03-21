@@ -247,4 +247,12 @@ public class Map<K, V> extends AbstractMap<K, V> {
         }
         return returned;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        Set<Entry<K, V>> set = entrySet();
+        for(Entry<K, V> e : set) s.append(e.toString()).append("; ");
+        return String.valueOf(s);
+    }
 }
