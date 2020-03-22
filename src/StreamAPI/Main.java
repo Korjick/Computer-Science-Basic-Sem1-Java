@@ -54,7 +54,7 @@ public class Main {
         ArrayList<String> list2 = new ArrayList<>();
         list2.add("Hello Dear");
         list2.add("Mama I`m Sorry");
-        k = list2.stream().filter(x -> x.length() > 5).map(x -> x.length()).count();
+        k = list2.stream().filter(x -> x.length() > 5).map(x -> x.length()).reduce(0, (acc, x) -> acc + x);
         System.out.println(k);
     }
 }
