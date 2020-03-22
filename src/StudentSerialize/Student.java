@@ -51,7 +51,10 @@ public class Student {
 
     @Override
     public String toString() {
-        return name + " - " + group + " - " + sex + " - " + birthDate + " - " + birthMonth + " - " + birthYear + ";";
+        return "Name: " + name + "\n"
+                        + "Group:" + group + "\n"
+                        + "Sex: " + sex + "\n"
+                        + "Birthday: " + birthDate + "." + birthMonth + "." + birthYear + "\n";
     }
 
     public static void serialize(Collection<Student> students, String path) {
