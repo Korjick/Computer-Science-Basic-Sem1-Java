@@ -1,17 +1,14 @@
 package StudentSerialize;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
-public class Student {
+public class Student implements Serializable {
     private String name, group;
     private char sex;
     private int birthDate, birthMonth, birthYear;
