@@ -11,7 +11,9 @@ public class StudentObjectInputStream extends InputStream {
     }
 
     public Student readStudent() throws IOException, ClassNotFoundException {
-        return (Student) readObject();
+        Object o  = readObject();
+        if(o instanceof Student) return (Student) o;
+        else return null;
     }
 
     @Override
