@@ -59,6 +59,7 @@ public class Student implements Serializable {
             ByteBuffer buffer = ByteBuffer.allocate(4);
             buffer.putInt(students.size());
             out.write(buffer.array());
+            out.flush();
 
             for (Student student : students) {
 
@@ -68,6 +69,7 @@ public class Student implements Serializable {
                 buffer.putInt(nameLen);
                 buffer.putInt(groupLen);
                 out.write(buffer.array());
+                out.flush();
 
                 buffer = ByteBuffer.allocate(14 + nameLen + groupLen);
                 buffer.put(student.getName().getBytes());
@@ -77,8 +79,8 @@ public class Student implements Serializable {
                 buffer.putInt(student.getBirthMonth());
                 buffer.putInt(student.getBirthYear());
                 out.write(buffer.array());
+                out.flush();
             }
-            out.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
