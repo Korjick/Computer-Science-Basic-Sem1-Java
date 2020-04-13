@@ -16,7 +16,7 @@ public class IniInputStream extends Reader {
     public Map<String, String> readIni() throws IOException {
         String text;
         Map<String, String> ini = new HashMap<>();
-        while(!(text = readLine()).isEmpty()){
+        while((text = readLine()) != null){
             String[] incoming = text.split("=");
             ini.put(incoming[0], incoming[1]);
         }
