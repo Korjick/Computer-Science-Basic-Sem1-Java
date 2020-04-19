@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public class IniInputStream extends Reader {
+public class IniReader extends Reader {
 
     private BufferedReader in;
 
-    public IniInputStream(Reader in){
+    public IniReader(Reader in){
         this.in = new BufferedReader(in);
     }
 
