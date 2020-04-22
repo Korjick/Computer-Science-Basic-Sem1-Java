@@ -1,5 +1,6 @@
 package Explorer;
 
+import java.awt.*;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
@@ -51,10 +52,10 @@ public class Main {
 
                 if(text.trim().toLowerCase().substring(0,4).equals("open")){
                     text = text.substring(4).trim();
-                    Path run = Paths.get(path.toString() + "/" + text);
-                    System.out.println(run);
-                    if(Files.exists(run) && !Files.isDirectory(run)){
-                        Process process = new ProcessBuilder(path.toString()).start();
+                    File run = new File(path.toString() + "/" + text);
+                    if(Files.exists(run.toPath()) && !Files.isDirectory(run.toPath())){
+                        System.out.println("Starting " + run + "...");
+                        Desktop.getDesktop().open(run);
                     }
                 }
             }
