@@ -41,6 +41,7 @@ public class Main {
                         path = Paths.get(path.toString() + "/" + text).normalize().toAbsolutePath();
                         if (!Files.exists(path)) path = path.getParent();
                     }
+                    return;
                 }
 
                 if(text.trim().toLowerCase().substring(0,3).equals("dir")){
@@ -48,6 +49,7 @@ public class Main {
                     System.out.println("[ <--------");
                     for(File file : fileSystem.listFiles()) System.out.println(file);
                     System.out.println("--------> ]");
+                    return;
                 }
 
                 if(text.trim().toLowerCase().substring(0,4).equals("open")){
@@ -57,6 +59,7 @@ public class Main {
                         System.out.println("Starting " + run + "...");
                         Desktop.getDesktop().open(run);
                     }
+                    return;
                 }
             }
         } catch (InvalidPathException e) {
