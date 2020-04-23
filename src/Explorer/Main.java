@@ -52,8 +52,8 @@ public class Main {
                     return;
                 }
 
-                if(text.trim().toLowerCase().substring(0,4).equals("open")){
-                    text = text.substring(4).trim();
+                if(text.trim().toLowerCase().substring(0,3).equals("run")){
+                    text = text.substring(3).trim();
                     File run = new File(path.toString() + "/" + text);
                     if(Files.exists(run.toPath()) && !Files.isDirectory(run.toPath())){
                         System.out.println("Starting " + run + "...");
