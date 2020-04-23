@@ -36,10 +36,10 @@ public class Main {
 
                     if(text.contains("/")){
                         Path abs = Paths.get(text);
-                        if(Files.exists(abs)) path = Paths.get(abs.toString());
+                        if(Files.exists(abs) && Files.isDirectory(abs)) path = Paths.get(abs.toString());
                     } else{
                         path = Paths.get(path.toString() + "/" + text).normalize().toAbsolutePath();
-                        if (!Files.exists(path)) path = path.getParent();
+                        if (!Files.exists(path) && !Files.isDirectory(path)) path = path.getParent();
                     }
                     return;
                 }
