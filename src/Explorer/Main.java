@@ -2,6 +2,7 @@ package Explorer;
 
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
@@ -16,9 +17,8 @@ public class Main {
     static Scanner in = new Scanner(System.in);
     static Path path = Paths.get(".").normalize().toAbsolutePath();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         System.out.print("<" + path + ">: ");
-
         while (!(text = in.nextLine()).toLowerCase().trim().equals("quit")) {
             parser(text.toLowerCase().trim());
             System.out.print("<" + path + ">: ");
@@ -31,7 +31,7 @@ public class Main {
             String cmd = line[0];
             String param = path.toString();
 
-            if(line.length > 1) param = line[1];
+            if (line.length > 1) param = line[1];
             Path abs = path.resolve(param).toAbsolutePath().normalize();
 
             if (cmd.equals("cd")) {
@@ -64,7 +64,9 @@ public class Main {
             }
 
             if (cmd.equals("run")) {
-                if (Files.exists(abs) && !Files.isDirectory(abs)) Desktop.getDesktop().open(abs.toFile());
+                if (Files.exists(abs) && !Files.isDirectory(abs)) {
+                    Desktop.getDesktop().open(abs.toFile());
+                }
             }
         } catch (InvalidPathException e) {
             System.out.println("Путь введен некорректно");
