@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
@@ -17,50 +19,52 @@ public class Main {
     public static void main(String[] args) {
         System.out.print("<" + path + ">: ");
 
-        while (!(text = in.nextLine()).equals("quit")) {
-            parser(text);
+        while (!(text = in.nextLine()).toLowerCase().trim().equals("quit")) {
+            parser(text.toLowerCase().trim());
             System.out.print("<" + path + ">: ");
         }
     }
 
     public static void parser(String text) {
         try {
-            if (text.length() > 2) {
-                if (text.trim().toLowerCase().substring(0,2).equals("cd")) {
-                    text = text.substring(2).trim();
+            String[] line = text.split(" ", 2);
+            String cmd = line[0];
+            String param = path.toString();
 
-                    if (text.equals("..")) {
-                        if (!path.equals(path.getRoot())) path = path.getParent();
-                        return;
-                    }
+            if(line.length > 1) param = line[1];
+            Path abs = path.resolve(param).toAbsolutePath().normalize();
 
-                    if(text.contains("/")){
-                        Path abs = Paths.get(text);
-                        if(Files.exists(abs) && Files.isDirectory(abs)) path = Paths.get(abs.toString());
-                    } else{
-                        path = Paths.get(path.toString() + "/" + text).normalize().toAbsolutePath();
-                        if (!Files.exists(path) && !Files.isDirectory(path)) path = path.getParent();
-                    }
+            if (cmd.equals("cd")) {
+                if (param.equals("..") && !path.equals(path.getRoot())) {
+                    path = path.getParent();
                     return;
                 }
 
-                if(text.trim().toLowerCase().substring(0,3).equals("dir")){
-                    File fileSystem = new File(path.toString());
-                    System.out.println("[ <--------");
-                    for(File file : fileSystem.listFiles()) System.out.println(file);
-                    System.out.println("--------> ]");
-                    return;
-                }
+                if (Files.exists(abs) && Files.isDirectory(abs)) path = Paths.get(abs.toString());
+            }
 
-                if(text.trim().toLowerCase().substring(0,3).equals("run")){
-                    text = text.substring(3).trim();
-                    File run = new File(path.toString() + "/" + text);
-                    if(Files.exists(run.toPath()) && !Files.isDirectory(run.toPath())){
-                        System.out.println("Starting " + run + "...");
-                        Desktop.getDesktop().open(run);
-                    }
-                    return;
+            if (cmd.equals("dir")) {
+                File fileList = new File(path.toString());
+                BasicFileAttributes attr;
+
+                System.out.println("[ <--------");
+                for (File file : Objects.requireNonNull(fileList.listFiles())) {
+                    attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+                    System.out.println(file.getName() + ":");
+                    System.out.println("    creationTime: " + attr.creationTime());
+                    System.out.println("    lastAccessTime: " + attr.lastAccessTime());
+                    System.out.println("    lastModifiedTime: " + attr.lastModifiedTime());
+                    System.out.println("    isDirectory: " + attr.isDirectory());
+                    System.out.println("    isOther: " + attr.isOther());
+                    System.out.println("    isRegularFile: " + attr.isRegularFile());
+                    System.out.println("    isSymbolicLink: " + attr.isSymbolicLink());
+                    System.out.println("    size: " + attr.size());
                 }
+                System.out.println("--------> ]");
+            }
+
+            if (cmd.equals("run")) {
+                if (Files.exists(abs) && !Files.isDirectory(abs)) Desktop.getDesktop().open(abs.toFile());
             }
         } catch (InvalidPathException e) {
             System.out.println("Путь введен некорректно");
