@@ -3,10 +3,7 @@ package Explorer;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Objects;
 import java.util.Scanner;
@@ -27,20 +24,21 @@ public class Main {
 
     public static void parser(String text) {
         try {
-            String[] line = text.split(" ", 2);
+            String[] line = text.split(" ");
             String cmd = line[0];
-            String param = path.toString();
-
-            if (line.length > 1) param = line[1];
-            Path abs = path.resolve(param).toAbsolutePath().normalize();
 
             if (cmd.equals("cd")) {
-                if (param.equals("..") && !path.equals(path.getRoot())) {
-                    path = path.getParent();
-                    return;
-                }
+                if (line.length > 1) {
+                    if (line[1].equals("..") && !path.equals(path.getRoot())) {
+                        path = path.getParent();
+                        return;
+                    }
 
-                if (Files.exists(abs) && Files.isDirectory(abs)) path = Paths.get(abs.toString());
+                    Path absolute = path.resolve(line[1]).toAbsolutePath().normalize();
+                    if (Files.exists(absolute) && Files.isDirectory(absolute)) path = Paths.get(absolute.toString());
+                } else {
+                    System.out.println("Введите путь к папке");
+                }
             }
 
             if (cmd.equals("dir")) {
@@ -64,12 +62,49 @@ public class Main {
             }
 
             if (cmd.equals("run")) {
-                if (Files.exists(abs) && !Files.isDirectory(abs)) {
-                    Desktop.getDesktop().open(abs.toFile());
+                if (line.length > 1) {
+                    Path run = path.resolve(line[1]).toAbsolutePath().normalize();
+
+                    if (Files.exists(run) && !Files.isDirectory(run)){
+                        System.out.println("Запуск программы...");
+                        Desktop.getDesktop().open(run.toFile());
+                    }
+                } else{
+                    System.out.println("Введите путь к файлу для исполнения");
+                }
+            }
+
+            if (cmd.equals("copy")) {
+                if (line.length > 2) {
+                    Path from = path.resolve(line[1]).toAbsolutePath().normalize();
+                    Path to = path.resolve(line[2]).toAbsolutePath().normalize();
+
+                    if (Files.exists(from) && Files.exists(to.getParent())){
+                        System.out.println("Копирование файла...");
+                        Files.copy(from, to);
+                    }
+                } else {
+                    System.out.println("Укажите сначала путь к файлу(включая имя файла), который собираетесь копировать, " +
+                            "а потом путь к месту назначения(включая имя нового файла)");
+                }
+            }
+
+            if (cmd.equals("delete")) {
+                if (line.length > 1) {
+                    Path delete = path.resolve(line[1]).toAbsolutePath().normalize();
+
+                    if (Files.exists(delete)){
+                        System.out.println("Удаление файла...");
+                        Files.delete(delete);
+                    }
+                } else {
+                    System.out.println("Введите путь к файлу для удаления");
                 }
             }
         } catch (InvalidPathException e) {
             System.out.println("Путь введен некорректно");
+        } catch (DirectoryNotEmptyException e) {
+            System.out.println("Невозможно удалить каталог, так как он содержит файлы");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
