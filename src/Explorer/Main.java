@@ -24,7 +24,7 @@ public class Main {
 
     public static void parser(String text) {
         try {
-            String[] line = text.split(" ");
+            String[] line = text.split(" ", 2);
             String cmd = line[0];
 
             if (cmd.equals("cd")) {
@@ -65,26 +65,29 @@ public class Main {
                 if (line.length > 1) {
                     Path run = path.resolve(line[1]).toAbsolutePath().normalize();
 
-                    if (Files.exists(run) && !Files.isDirectory(run)){
+                    if (Files.exists(run) && !Files.isDirectory(run)) {
                         System.out.println("Запуск программы...");
                         Desktop.getDesktop().open(run.toFile());
                     }
-                } else{
+                } else {
                     System.out.println("Введите путь к файлу для исполнения");
                 }
             }
 
             if (cmd.equals("copy")) {
-                if (line.length > 2) {
-                    Path from = path.resolve(line[1]).toAbsolutePath().normalize();
-                    Path to = path.resolve(line[2]).toAbsolutePath().normalize();
+                if (line.length > 1) {
+                    String[] fromTo = line[1].split("", 2);
+                    if (fromTo.length > 1) {
+                        Path from = path.resolve(fromTo[0]).toAbsolutePath().normalize();
+                        Path to = path.resolve(fromTo[1]).toAbsolutePath().normalize();
 
-                    if (Files.exists(from) && Files.exists(to.getParent())){
-                        System.out.println("Копирование файла...");
-                        Files.copy(from, to);
+                        if (Files.exists(from) && Files.exists(to.getParent())) {
+                            System.out.println("Копирование файла...");
+                            Files.copy(from, to);
+                        }
                     }
                 } else {
-                    System.out.println("Укажите сначала путь к файлу(включая имя файла), который собираетесь копировать, " +
+                    System.out.println("Укажите сначала путь к файлу(включая имя файла) или папке, который собираетесь копировать, " +
                             "а потом путь к месту назначения(включая имя нового файла)");
                 }
             }
@@ -93,7 +96,7 @@ public class Main {
                 if (line.length > 1) {
                     Path delete = path.resolve(line[1]).toAbsolutePath().normalize();
 
-                    if (Files.exists(delete)){
+                    if (Files.exists(delete)) {
                         System.out.println("Удаление файла...");
                         Files.delete(delete);
                     }
