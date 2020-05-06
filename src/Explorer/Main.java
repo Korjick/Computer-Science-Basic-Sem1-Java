@@ -29,7 +29,7 @@ public class Main {
     public static void recursiveDelete(Path delete) throws IOException {
         if (Files.isDirectory(delete))
             for (File f : Objects.requireNonNull(delete.toFile().listFiles()))
-                recursiveDelete(delete);
+                recursiveDelete(f.toPath().toAbsolutePath().normalize());
 
         Files.delete(delete);
     }
@@ -40,9 +40,9 @@ public class Main {
             for (File f : Objects.requireNonNull(from.toFile().listFiles()))
                 recursiveCopy(f.toPath().toAbsolutePath().normalize(),
                         to.resolve(f.getName()));
+        } else{
+            Files.copy(from, to);
         }
-
-        Files.copy(from, to);
     }
 
     public static void parser(String text) {
