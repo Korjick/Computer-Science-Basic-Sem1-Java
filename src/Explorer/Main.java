@@ -1,8 +1,12 @@
 package Explorer;
 
 import java.awt.*;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
+import java.nio.charset.MalformedInputException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
@@ -57,7 +61,6 @@ public class Main {
                         path = path.getParent();
                         return;
                     }
-
                     Path absolute = path.resolve(param).toAbsolutePath().normalize();
                     if (Files.exists(absolute) && Files.isDirectory(absolute)) path = Paths.get(absolute.toString());
                 } else {
@@ -144,10 +147,45 @@ public class Main {
                     System.out.println("Введите путь к файлу для удаления");
                 }
             }
+
+            if(cmd.equals("cat")){
+                if(line.length > 1){
+                    String[] encoding = line[1].split(" ", 2);
+                    Path read;
+
+                    BufferedReader reader = null;
+                    String param, encodingParam;
+
+                    if(encoding.length > 1){
+                        param = encoding[0].trim().toLowerCase();
+                        encodingParam = encoding[1].trim().toLowerCase();
+
+                        read = path.resolve(param).toAbsolutePath().normalize();
+                        if(Files.exists(read)) reader = Files.newBufferedReader(read, Charset.forName(encodingParam));
+                    } else{
+                        param = encoding[0].trim().toLowerCase();
+                        read = path.resolve(param).toAbsolutePath().normalize();
+                        if(Files.exists(read)) reader = Files.newBufferedReader(read);
+                    }
+
+                    if(reader != null){
+                        while((param = reader.readLine()) != null){
+                            System.out.println(param);
+                        }
+                        reader.close();
+                    }
+                } else {
+                    System.out.println("Введите путь к файлу, который необходимо прочесть");
+                }
+            }
         } catch (InvalidPathException e) {
             System.out.println("Путь введен некорректно");
         } catch (DirectoryNotEmptyException e) {
             System.out.println("Невозможно удалить каталог, так как он содержит файлы");
+        } catch (MalformedInputException e){
+            System.out.println("Укажите кодировку при чтении файла");
+        } catch (IllegalCharsetNameException e){
+            System.out.println("Неправильно указана кодировка файла");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
