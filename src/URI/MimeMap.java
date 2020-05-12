@@ -83,6 +83,7 @@ public class MimeMap {
         s_mapMimeTypes.put("mov", "video/quicktime");
         s_mapMimeTypes.put("mp2", "audio/mpeg");
         s_mapMimeTypes.put("mp3", "audio/mpeg");
+        s_mapMimeTypes.put("mp4", "audio/mp4");
         s_mapMimeTypes.put("mpeg", "video/mpeg");
         s_mapMimeTypes.put("mpe", "video/mpeg");
         s_mapMimeTypes.put("mpga", "audio/mpeg");
