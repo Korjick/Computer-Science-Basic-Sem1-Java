@@ -58,7 +58,7 @@ public class DownloadThread extends Thread {
             if (Files.exists(download)) Files.delete(download);
             Files.copy(inputStream, download);
             inputStream.close();
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             System.out.println("Не удалось скачать файл");
         }
     }
