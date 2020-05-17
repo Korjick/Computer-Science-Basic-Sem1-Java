@@ -44,7 +44,7 @@ public class MimeMap {
         s_mapMimeTypes.put("dxr", "application/x-director");
         s_mapMimeTypes.put("eps", "application/postscript");
         s_mapMimeTypes.put("etx", "text/x-setext");
-        s_mapMimeTypes.put("exe", "application/octet-stream");
+        s_mapMimeTypes.put("exe", "application/x-dosexec");
         s_mapMimeTypes.put("ez", "application/andrew-inset");
         s_mapMimeTypes.put("gif", "image/gif");
         s_mapMimeTypes.put("gtar", "application/x-gtar");
