@@ -64,7 +64,7 @@ public class DownloadThread extends Thread {
     }
 
     public void percentOfDownloading() {
-        if (Thread.interrupted()) {
+        if (Thread.currentThread().getState().equals(State.TERMINATED)) {
             System.out.println("100%");
             return;
         }
