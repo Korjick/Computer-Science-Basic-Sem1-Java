@@ -65,6 +65,16 @@ public class SimpleCollection<T> extends AbstractCollection<T> {
         };
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SimpleCollection<?> that = (SimpleCollection<?>) o;
+
+        if(elementCount != that.elementCount) return false;
+        return Arrays.equals(arr, that.arr);
+    }
+
     private T[] positiveArrayResize() {
         T[] returnArray = (T[]) new Object[(int)(1 + arr.length * ARRAY_EXPANSION)];
         System.arraycopy(arr, 0, returnArray, 0, size());
