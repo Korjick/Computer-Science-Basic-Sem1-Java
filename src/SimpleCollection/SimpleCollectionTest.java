@@ -4,8 +4,6 @@ import org.junit.Assert;
 
 import java.util.Iterator;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class SimpleCollectionTest {
 
     @org.junit.jupiter.api.Test
@@ -21,7 +19,6 @@ class SimpleCollectionTest {
         actual.add(b);
         actual.add(c);
         Assert.assertEquals(expected, actual);
-        Assert.assertNotNull(expected);
     }
 
     @org.junit.jupiter.api.Test
@@ -37,7 +34,6 @@ class SimpleCollectionTest {
         actual.add(b);
         actual.add(c);
         Assert.assertEquals(expected.size(), actual.size());
-        Assert.assertNotNull(expected);
     }
 
     @org.junit.jupiter.api.Test
@@ -56,6 +52,5 @@ class SimpleCollectionTest {
         Iterator<Integer> acIter = actual.iterator();
 
         Assert.assertEquals(exIter.next(), acIter.next());
-        Assert.assertNotNull(exIter);
     }
 }
